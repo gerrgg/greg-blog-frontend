@@ -51,6 +51,17 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (id) => {
+    try {
+      await blogService.remove(id);
+      setBlogs(blogs.filter(blog => blog.id !== id));
+      notify({ type: 'success', message: 'Blog deleted successfully!' });
+    } catch (exception) {
+      console.error("Error deleting blog", exception);
+      notify({ type: 'error', message: 'Failed to delete blog' });
+    }
+  }
+
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
@@ -90,7 +101,7 @@ const App = () => {
           <LoginForm handleLogin={handleLogin} />
         </Togglable>
       )}
-      <BlogContainer blogs={blogs} updateBlog={updateBlog} />
+      <BlogContainer blogs={blogs} user={user} updateBlog={updateBlog} deleteBlog={deleteBlog} />
       {user && (
         <Togglable buttonLabel="New Blog" ref={blogFormRef}>
           <h2>Create New Blog</h2>

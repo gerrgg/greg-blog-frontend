@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [showMore, setShowMore] = useState(false);
 
   const blogStyle = {
@@ -20,7 +20,6 @@ const Blog = ({ blog, updateBlog }) => {
 
   const topStyle = {
     display: 'flex',
-    justifyContent: 'space-between',
     width: '100%',
     gap: '30px',
   }
@@ -35,6 +34,21 @@ const Blog = ({ blog, updateBlog }) => {
     height: '30px',
     fontSize: '14px',
     fontWeight: 'bold',
+    marginLeft: 'auto',
+  }
+
+  const deleteButtonStyle = {
+    ...buttonStyle,
+    backgroundColor: '#dc3545',
+  }
+
+  const likeStyle = {
+    fontWeight: 'bold',
+    color: '#333',
+    marginRight: '10px',  
+    fontSize: '16px',
+    width: '30px',
+    minWidth: '30px',
   }
 
   const handleLike = (e) => {
@@ -46,10 +60,18 @@ const Blog = ({ blog, updateBlog }) => {
     }
     updateBlog(blog.id, updatedBlog)
   }
+
+  const handleDelete = (e) => {
+    e.preventDefault()
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      deleteBlog(blog.id)
+    }
+  }
   
   return (
     <div className="blog" style={blogStyle}>
       <div style={topStyle}>
+        <span style={likeStyle}>{blog.likes}</span>
         <span>{blog.title} - {blog.author}</span>
         <button style={buttonStyle} onClick={() => setShowMore(!showMore)}>
           {showMore ? 'Hide' : 'Show'}
@@ -59,6 +81,16 @@ const Blog = ({ blog, updateBlog }) => {
         <p><strong>URL:</strong> {blog.url}</p>
         <p><strong>Likes:</strong> {blog.likes} <button onClick={handleLike}>like</button></p>
         <p><strong>Added by:</strong> {blog.user ? blog.user.name : 'Unknown'}</p>
+        {
+          blog.user?.username === user?.username ? 
+            <button 
+              style={deleteButtonStyle} 
+              onClick={handleDelete}
+            >
+              delete
+            </button>
+            : null
+        }
       </div>
     </div>
   )
