@@ -6,6 +6,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import NotificationContainer from "./components/NotificationContainer";
 import { notify } from './components/notificationBus';
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -62,6 +63,7 @@ const App = () => {
   return (
     <div>
       <NotificationContainer />
+      <h1>Blogs</h1>
       {user ? (
         <div>
           <p>{user.name} logged in</p>
@@ -69,11 +71,10 @@ const App = () => {
           <BlogForm createBlog={createBlog} />
         </div>
       ) : (
-        <div>
+        <Togglable buttonLabel="Login">
           <LoginForm handleLogin={handleLogin} />
-        </div>
+        </Togglable>
       )}
-      <h2>blogs</h2>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}
