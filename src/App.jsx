@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
@@ -7,10 +7,12 @@ import loginService from "./services/login";
 import NotificationContainer from "./components/NotificationContainer";
 import { notify } from './components/notificationBus';
 import Togglable from "./components/Togglable";
+import BlogContainer from "./components/BlogContainer";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  const blogFormRef = useRef();
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -27,6 +29,7 @@ const App = () => {
 
   const createBlog = async (newBlog) => {
     try {
+      blogFormRef.current.toggleVisibility();
       const createdBlog = await blogService.create(newBlog);
       setBlogs(blogs.concat(createdBlog));
     } catch (exception) {
@@ -63,7 +66,7 @@ const App = () => {
   return (
     <div>
       <NotificationContainer />
-      <h1>Blogs</h1>
+      <h1>GREGORY BASTIANELLI</h1>
       {user ? (
         <div>
           <p>{user.name} logged in</p>
@@ -74,13 +77,10 @@ const App = () => {
           <LoginForm handleLogin={handleLogin} />
         </Togglable>
       )}
-      <ul>
-        {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
-      </ul>
+      <BlogContainer blogs={blogs} />
       {user && (
-        <Togglable buttonLabel="New Blog">
+        <Togglable buttonLabel="New Blog" ref={blogFormRef}>
+          <h2>Create New Blog</h2>
           <BlogForm createBlog={createBlog} />
         </Togglable>
       )}
