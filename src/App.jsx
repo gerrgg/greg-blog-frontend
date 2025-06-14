@@ -68,16 +68,22 @@ const App = () => {
         <div>
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
-          <BlogForm createBlog={createBlog} />
         </div>
       ) : (
         <Togglable buttonLabel="Login">
           <LoginForm handleLogin={handleLogin} />
         </Togglable>
       )}
-      {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
+      <ul>
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
+      </ul>
+      {user && (
+        <Togglable buttonLabel="New Blog">
+          <BlogForm createBlog={createBlog} />
+        </Togglable>
+      )}
     </div>
   );
 };
