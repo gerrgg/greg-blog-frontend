@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
-import Notification from "./components/Notification";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import NotificationContainer from "./components/NotificationContainer";
+import { notify } from './components/notificationBus';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [notification, setNotification] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -45,11 +45,10 @@ const App = () => {
 
       blogService.setToken(user.token);
       setUser(user);
+      notify({ type: 'success', message: 'Logged in successfully!' });
     } catch (exception) {
-      setNotification("Wrong username or password");
-      setTimeout(() => {
-        setNotification(null);
-      }, 5000);
+      const response = exception.response?.data || exception;
+      notify({ type: 'error', message: response.error || 'Login failed' });
     }
   };
 
@@ -57,10 +56,12 @@ const App = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
     blogService.setToken(null);
+    notify({ type: 'success', message: 'Logged out successfully!' });
   };
 
   return (
     <div>
+      <NotificationContainer />
       {user ? (
         <div>
           <p>{user.name} logged in</p>
@@ -70,7 +71,6 @@ const App = () => {
       ) : (
         <div>
           <LoginForm handleLogin={handleLogin} />
-          <Notification message={notification} isError={true} />
         </div>
       )}
       <h2>blogs</h2>
