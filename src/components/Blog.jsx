@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [showMore, setShowMore] = useState(false);
 
   const blogStyle = {
@@ -36,6 +36,16 @@ const Blog = ({ blog }) => {
     fontSize: '14px',
     fontWeight: 'bold',
   }
+
+  const handleLike = (e) => {
+    e.preventDefault()
+
+    const updatedBlog = {
+      ...blog,
+      likes: blog.likes + 1,
+    }
+    updateBlog(blog.id, updatedBlog)
+  }
   
   return (
     <div className="blog" style={blogStyle}>
@@ -47,7 +57,7 @@ const Blog = ({ blog }) => {
       </div>  
       <div style={bottomStyle}>
         <p><strong>URL:</strong> {blog.url}</p>
-        <p><strong>Likes:</strong> {blog.likes} <button>like</button></p>
+        <p><strong>Likes:</strong> {blog.likes} <button onClick={handleLike}>like</button></p>
         <p><strong>Added by:</strong> {blog.user ? blog.user.name : 'Unknown'}</p>
       </div>
     </div>

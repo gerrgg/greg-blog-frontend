@@ -38,6 +38,19 @@ const App = () => {
     }
   };
 
+  const updateBlog = async (id, updatedBlog) => {
+    try {
+      const updated = await blogService.update(id, updatedBlog)
+      const allBlogs = await blogService.getAll()
+      setBlogs(allBlogs)
+
+      notify({ type: 'success', message: 'Blog updated successfully!' });
+    } catch (exception) {
+      console.error("Error updating blog", exception);
+      notify({ type: 'error', message: 'Failed to update blog' });
+    }
+  }
+
   const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({
@@ -77,7 +90,7 @@ const App = () => {
           <LoginForm handleLogin={handleLogin} />
         </Togglable>
       )}
-      <BlogContainer blogs={blogs} />
+      <BlogContainer blogs={blogs} updateBlog={updateBlog} />
       {user && (
         <Togglable buttonLabel="New Blog" ref={blogFormRef}>
           <h2>Create New Blog</h2>
