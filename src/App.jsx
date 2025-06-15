@@ -1,6 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import Blog from "./components/Blog";
-import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -8,6 +6,9 @@ import NotificationContainer from "./components/NotificationContainer";
 import { notify } from './components/notificationBus';
 import Togglable from "./components/Togglable";
 import BlogContainer from "./components/BlogContainer";
+import Header from "./components/Header";
+import '@fontsource-variable/orbitron';
+
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -90,22 +91,12 @@ const App = () => {
   return (
     <div>
       <NotificationContainer />
-      <h1>GREGORY BASTIANELLI</h1>
-      {user ? (
-        <div>
-          <p>{user.name} logged in</p>
-          <button onClick={handleLogout}>logout</button>
-        </div>
-      ) : (
-        <Togglable buttonLabel="Login">
-          <LoginForm handleLogin={handleLogin} />
-        </Togglable>
-      )}
+      <Header user={user} handleLogin={handleLogin} handleLogout={handleLogout} />
       <BlogContainer blogs={blogs} user={user} updateBlog={updateBlog} deleteBlog={deleteBlog} />
       {user && (
         <Togglable buttonLabel="New Blog" ref={blogFormRef}>
           <h2>Create New Blog</h2>
-          <BlogForm createBlog={createBlog} />
+          <BlogForm createBlog={createBlog} blogFormRef={blogFormRef} />
         </Togglable>
       )}
     </div>

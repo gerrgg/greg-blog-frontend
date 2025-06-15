@@ -8,8 +8,9 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
     border: '1px solid #ccc',
     marginBottom: 5,
     borderRadius: 5,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: '#333',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    color: 'white',
   }
 
   const bottomStyle = {
@@ -44,11 +45,24 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
 
   const likeStyle = {
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',
     marginRight: '10px',  
     fontSize: '16px',
     width: '30px',
     minWidth: '30px',
+  }
+
+  const likeButtonStyle = {
+    padding: '5px 10px',
+    backgroundColor: 'pink',
+    color: 'white',
+    border: 'none',
+    borderRadius: 3,
+    cursor: 'pointer',
+    height: '30px',
+    fontSize: '14px',
+    fontWeight: 'bold',
+    marginLeft: '10px',
   }
 
   const handleLike = (e) => {
@@ -79,7 +93,7 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
       </div>  
       <div style={bottomStyle}>
         <p><strong>URL:</strong> {blog.url}</p>
-        <p><strong>Likes:</strong> {blog.likes} <button onClick={handleLike}>like</button></p>
+        <p><strong>Likes:</strong> {blog.likes} <button style={likeButtonStyle} onClick={handleLike}>❤️</button></p>
         <p><strong>Added by:</strong> {blog.user ? blog.user.name : 'Unknown'}</p>
         {
           blog.user?.username === user?.username ? 
