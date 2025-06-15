@@ -11,9 +11,9 @@ import '@fontsource-variable/orbitron';
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
-  const blogFormRef = useRef();
+  const [blogs, setBlogs] = useState([])
+  const [user, setUser] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -22,33 +22,32 @@ const App = () => {
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON);
-      setUser(user);
-      blogService.setToken(user.token);
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
     }
   }, []);
 
   const createBlog = async (newBlog) => {
     try {
-      blogFormRef.current.toggleVisibility();
-      const createdBlog = await blogService.create(newBlog);
-      setBlogs(blogs.concat(createdBlog));
+      blogFormRef.current.toggleVisibility()
+      const createdBlog = await blogService.create(newBlog)
+      setBlogs(blogs.concat(createdBlog))
     } catch (exception) {
       console.error("Error creating blog", exception);
-      alert("Failed to create blog");
+      alert("Failed to create blog")
     }
   };
 
   const updateBlog = async (id, updatedBlog) => {
     try {
-      const updated = await blogService.update(id, updatedBlog)
       const allBlogs = await blogService.getAll()
       setBlogs(allBlogs)
 
-      notify({ type: 'success', message: 'Blog updated successfully!' });
+      notify({ type: 'success', message: 'Blog updated successfully!' })
     } catch (exception) {
-      console.error("Error updating blog", exception);
-      notify({ type: 'error', message: 'Failed to update blog' });
+      console.error('Error updating blog', exception)
+      notify({ type: 'error', message: 'Failed to update blog' })
     }
   }
 
